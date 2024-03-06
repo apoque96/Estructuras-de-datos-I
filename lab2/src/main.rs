@@ -214,7 +214,6 @@ fn lab2(path: &str){
             price_a.partial_cmp(&price_b).unwrap_or(std::cmp::Ordering::Equal)
         });
         print!("[");
-        {
         let mut i = 0;
         while i < ans.len(){
             let id = ans[i]["id"].as_str();
@@ -227,7 +226,6 @@ fn lab2(path: &str){
                 print!(",");
             }
             i += 1;
-        }
         }
         println!("]");
     }
