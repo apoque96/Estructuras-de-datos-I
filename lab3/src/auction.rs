@@ -8,7 +8,11 @@ use crate::customers::Customer;
 use crate::customers::create_customer;
 
 use crate::customers::Winner;
-// use crate::customers::create_winner;
+use crate::customers::create_winner;
+
+use crate::heap::create_heap;
+use crate::customers::create_customer_of_property;
+use crate::customers::CustomerOfProperty;
 
 // Reads the file line by line
 fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
@@ -19,7 +23,7 @@ fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
         .collect()
 }
 
-//Convierte la linea en el mapa
+// Converts the line into a hashmap
 fn get_map(ln: &String) -> Result<Value> {
     let v: Value = serde_json::from_str(ln)?;
 
@@ -38,6 +42,7 @@ fn load_db(customers_db_strings: Vec<String>) -> HashMap<u64, Customer>{
         let map = map.ok().unwrap();
         // Just some error handling LOL
         // I don't know why it's being dropped
+        // Reminder: avoid lifetimes unless I know what the hell they do
         let dpi = match map["dpi"].as_u64() {
             Some(x) => { x },
             None => {break;},
@@ -75,24 +80,60 @@ fn load_db(customers_db_strings: Vec<String>) -> HashMap<u64, Customer>{
             place_job, 
             salary);
         customers_db.insert(dpi, element);
-        println!("{:?}", customers_db.get(&dpi));
     }
     customers_db
+}
+
+fn determine_winner(auction: &String, customers_db: &HashMap<u64, Customer>) -> Option<Winner>{
+    let auction = get_map(auction);
+    let auction = auction.unwrap();
+
+    let property = auction["property"].as_str()?;
+    let mut rejection = auction["rejection"].as_u64()?;
+    let customers: Vec<CustomerOfProperty> = auction["customers"].as_array()?
+        .to_vec().iter().map( |value| {
+            create_customer_of_property(
+                value["dpi"].as_u64().unwrap(),
+                value["budget"].as_u64().unwrap(),
+                value["date"].as_str().unwrap().to_string(),
+            )
+        }).collect();
+
+    let mut max_heap = create_heap(customers);
+    
+    while rejection > 0{
+        max_heap.pop().unwrap();
+        rejection -= 1;
+    }
+
+    let winner = max_heap.pop()?;
+    let customer = customers_db.get(&winner.dpi)?;
+
+    Some(create_winner(
+            winner.dpi, 
+            winner.date.clone(),
+            customer.first_name.clone(), 
+            customer.last_name.clone(), 
+            customer.birth_date.clone(), 
+            customer.job.clone(), 
+            customer.place_job.clone(), 
+            customer.salary, 
+            property.to_string(), 
+            winner.budget))
 }
 
 pub fn get_winner(){
     let customers_db = load_db(lines_from_file("./input/input_customer_example_lab_3(1).jsonl"));
     let auctions = lines_from_file("./input/input_auctions_example_lab_3(1).jsonl");
-    determine_winner(&auctions[0]);
-}
+    for auction in auctions{
+        let winner = determine_winner( &auction, &customers_db);
+        if !winner.is_some(){
+            println!("no winner");
+            return;
+        }
+        let winner = winner.unwrap();
 
-fn determine_winner(auction: &String) -> Option<Winner>{
-    let auction = get_map(auction);
-
-    if !auction.is_ok(){
-        return None;
+        let json = serde_json::to_string(&winner).unwrap();
+        println!("{}", json);
     }
-
-    // create_winner(dpi, first_name, last_name, birth_date, job, place_job, salary, property, budget)
-    None
 }

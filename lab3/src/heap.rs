@@ -44,8 +44,12 @@ impl MaxHeap {
         let index = self.arr.len()-1;
         self.arr.swap(0, index);
         let element = self.arr.pop();
-        //In case it's the last element, then it does'nt heapify
-        if index != 0 { self.heapify(0) };
+        let mut index = self.arr.len() / 2;
+        // Sorts the heap
+        while index > 0{
+            self.heapify(index-1);
+            index -= 1;
+        }
         match element {
             Some(x) => { Some(x) },
             None => { None },

@@ -1,3 +1,5 @@
+use serde::Serialize;
+
 #[derive(Debug, Clone)]
 pub struct CustomerOfProperty{
     pub dpi: u64,
@@ -41,9 +43,11 @@ pub fn create_customer(
         salary,
     }
 }
-
+#[derive(Serialize)]
 pub struct Winner{
     pub dpi: u64,
+    pub budget: u64,
+    pub date: String,
     pub first_name: String,
     pub last_name: String,
     pub birth_date: String,
@@ -51,11 +55,11 @@ pub struct Winner{
     pub place_job: String,
     pub salary: u64,
     pub property: String,
-    pub budget: u64,
 }
 
 pub fn create_winner(
     dpi: u64, 
+    date: String,
     first_name: String, 
     last_name: String, 
     birth_date: String, 
@@ -66,6 +70,7 @@ pub fn create_winner(
     budget: u64) -> Winner{
     Winner{
         dpi,
+        date,
         first_name,
         last_name,
         birth_date,
