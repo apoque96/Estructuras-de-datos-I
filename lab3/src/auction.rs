@@ -102,7 +102,7 @@ fn determine_winner(auction: &String, customers_db: &HashMap<u64, Customer>) -> 
     let mut max_heap = create_heap(customers);
     
     while rejection > 0{
-        max_heap.pop().unwrap();
+        max_heap.pop();
         rejection -= 1;
     }
 

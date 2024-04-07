@@ -29,7 +29,10 @@ impl MaxHeap {
                 largest = 2*i + 2;
             }
         }
-        self.arr.swap(i, largest);
+        if largest != i{
+            self.arr.swap(i, largest);
+            self.heapify(largest);
+        }
     }
 
     pub fn build_max_heap(&mut self){
@@ -44,12 +47,7 @@ impl MaxHeap {
         let index = self.arr.len()-1;
         self.arr.swap(0, index);
         let element = self.arr.pop();
-        let mut index = self.arr.len() / 2;
-        // Sorts the heap
-        while index > 0{
-            self.heapify(index-1);
-            index -= 1;
-        }
+        self.heapify(0);
         match element {
             Some(x) => { Some(x) },
             None => { None },
