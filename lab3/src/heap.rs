@@ -1,8 +1,8 @@
 use crate::customers::CustomerOfProperty;
 
 #[derive(Debug)]
-pub struct MaxHeap<'a>{
-    arr: Vec<CustomerOfProperty<'a>>,
+pub struct MaxHeap{
+    arr: Vec<CustomerOfProperty>,
 }
 
 pub fn create_heap(arr: Vec<CustomerOfProperty>) -> MaxHeap{
@@ -13,17 +13,18 @@ pub fn create_heap(arr: Vec<CustomerOfProperty>) -> MaxHeap{
     heap
 }
 
-impl MaxHeap<'_> {
+impl MaxHeap {
+    // 2*i+1 = left child, 2*i+2 = right child
     fn heapify(&mut self, i: usize){
         let mut largest = i;
         if  2*i + 1 < self.arr.len(){
-            let left_child = self.arr[2*i + 1];
+            let left_child = self.arr[2*i + 1].clone();
             if left_child.budget > self.arr[largest].budget{
                 largest = 2*i + 1;
             }
         }
         if  2*i + 2 < self.arr.len(){
-            let right_child = self.arr[2*i + 2];
+            let right_child = self.arr[2*i + 2].clone();
             if right_child.budget > self.arr[largest].budget{
                 largest = 2*i + 2;
             }
@@ -43,6 +44,7 @@ impl MaxHeap<'_> {
         let index = self.arr.len()-1;
         self.arr.swap(0, index);
         let element = self.arr.pop();
+        //In case it's the last element, then it does'nt heapify
         if index != 0 { self.heapify(0) };
         match element {
             Some(x) => { Some(x) },

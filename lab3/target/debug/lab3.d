@@ -1,1 +1,1 @@
-/home/apoque/Estructuras-de-datos-I/lab3/target/debug/lab3: /home/apoque/Estructuras-de-datos-I/lab3/src/customers.rs /home/apoque/Estructuras-de-datos-I/lab3/src/heap.rs /home/apoque/Estructuras-de-datos-I/lab3/src/main.rs
+/home/apoque/Estructuras-de-datos-I/lab3/target/debug/lab3: /home/apoque/Estructuras-de-datos-I/lab3/src/auction.rs /home/apoque/Estructuras-de-datos-I/lab3/src/customers.rs /home/apoque/Estructuras-de-datos-I/lab3/src/heap.rs /home/apoque/Estructuras-de-datos-I/lab3/src/main.rs
