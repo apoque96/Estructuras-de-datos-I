@@ -14,6 +14,16 @@ use crate::heap::create_heap;
 use crate::customers::create_customer_of_property;
 use crate::customers::CustomerOfProperty;
 
+//Hashes the dpi
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
+fn hash_u64(value: u64) -> String {
+    let mut hasher = DefaultHasher::new();
+    value.hash(&mut hasher);
+    let hashed_value = hasher.finish();
+    format!("{:x}", hashed_value)
+}
+
 // Reads the file line by line
 fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
     let file = File::open(filename).expect("no such file");
@@ -119,12 +129,13 @@ fn determine_winner(auction: &String, customers_db: &HashMap<u64, Customer>) -> 
             customer.place_job.clone(), 
             customer.salary, 
             property.to_string(), 
-            winner.budget))
+            winner.budget,
+            hash_u64(winner.dpi)))
 }
 
 pub fn get_winner(){
-    let customers_db = load_db(lines_from_file("./input/input_customer_example_lab_3(1).jsonl"));
-    let auctions = lines_from_file("./input/input_auctions_example_lab_3(1).jsonl");
+    let customers_db = load_db(lines_from_file("./input/input_customer_challenge_lab_3.jsonl"));
+    let auctions = lines_from_file("./input/input_auctions_challenge_lab_3.jsonl");
     for auction in auctions{
         let winner = determine_winner( &auction, &customers_db);
         if !winner.is_some(){

@@ -55,6 +55,7 @@ pub struct Winner{
     pub place_job: String,
     pub salary: u64,
     pub property: String,
+    pub signature: String,
 }
 
 pub fn create_winner(
@@ -67,7 +68,8 @@ pub fn create_winner(
     place_job: String, 
     salary: u64, 
     property: String, 
-    budget: u64) -> Winner{
+    budget: u64,
+    signature: String) -> Winner{
     Winner{
         dpi,
         date,
@@ -79,5 +81,6 @@ pub fn create_winner(
         salary,
         property,
         budget,
+        signature,
     }
 }
