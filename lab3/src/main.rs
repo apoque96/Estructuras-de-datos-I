@@ -1,8 +1,8 @@
 use crate::auction::get_winner;
 
-pub mod heap;
-pub mod customers;
 pub mod auction;
+pub mod customers;
+pub mod sort;
 
 fn main() {
     use std::time::Instant;
